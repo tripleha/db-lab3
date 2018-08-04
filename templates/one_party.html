@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css">
+        </style>
+        <title>订单详情</title>
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">聚会预约平台</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                聚会项目 <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/party_list" target="view_window">查看</a></li>
+                                <li><a href="/add_party" target="view_window">添加</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/goods_list" target="view_window">查看可购买物品</a>
+                        </li>
+                        <li>
+                            <a href="/place_list" target="view_window">查看可选地点</a>
+                        </li>
+                        <li>
+                            <a href="/standard_list" target="view_window">查看可选规格</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                {{ user_name }} <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user_info" target="view_window">个人资料</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/login" target="view_window">切换用户</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/signup" target="view_window">新用户注册</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>订单详情</h1>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">订单评价</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% if party_order.active == "1" %}
+                        订单未完成...
+                        {% else %}
+                        {{ party_order.review }}
+                        {% endif %}
+                    </div>
+                </div>
+                <table class="table">
+                    <tr class="bg-primary">
+                        <td>订单ID</td>
+                        <td>{{ party_order.order_id }}</td>
+                    </tr>
+                    <tr class="bg-primary">
+                        <td>订单状态</td>
+                        {% if party_order.active == "1" %}
+                        <td>等待完成</td>
+                        {% else %}
+                        <td>已完成</td>
+                        {% endif %}
+                    </tr>
+                    <tr class="bg-primary">
+                        <td>开始时间</td>
+                        <td>{{ party_order.begin }}</td>
+                    </tr>
+                    <tr class="bg-primary">
+                        <td>结束时间</td>
+                        <td>{{ party_order.end }}</td>
+                    </tr>
+                    <tr>
+                        {% if party_order.active == "1" %}
+                        <td><a class="btn btn-info" href="/party_done/{{ party_order.order_id }}">完成订单并评价</a></td>
+                        {% else %}
+                        <td><a class="btn btn-info" disabled="disabled">订单已完成</a></td>
+                        {% endif %}
+                    </tr>
+                </table>
+                <table class="table">
+                    <caption>采购商品相关</caption>
+                    <tbody>
+                        <tr class="bg-primary">
+                            <td>购物清单条数</td>
+                            <td>{{ party_order.shopping_count }}条</td>
+                        </tr>
+                        <tr>
+                            <td>商品送达时间</td>
+                            <td>{{ party_order.shopping_end }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            {% if party_order.active == "1" %}
+                            <td><a class="btn btn-danger" href="/get_shopping_list/{{ party_order.order_id }}">管理购物清单</a></td>
+                            {% else %}
+                            <td><a class="btn btn-info" href="/get_shopping_list/{{ party_order.order_id }}">查看购物清单</a></td>
+                            {% endif %}
+                        </tr>
+                    </tfoot>
+                </table>
+                <table class="table">
+                    <caption>邀请客人相关</caption>
+                    <tbody>
+                        <tr class="bg-primary">
+                            <td>邀请客人总数</td>
+                            <td>{{ party_order.guest_count }}人</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            {% if party_order.active == "1" %}
+                            <td><a class="btn btn-danger" href="/get_guests/{{ party_order.order_id }}">管理客人清单</a></td>
+                            {% else %}
+                            <td><a class="btn btn-info" href="/get_guests/{{ party_order.order_id }}">查看客人清单</a></td>
+                            {% endif %}
+                        </tr>
+                    </tfoot>
+                </table>
+                <table class="table">
+                    <caption>聚会地点相关</caption>
+                    <tr class="bg-primary">
+                        <td>聚会地点ID</td>
+                        <td>{{ party_order.place_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>聚会地址</td>
+                        <td>{{ party_order.place_loc }}</td>
+                    </tr>
+                    <tr>
+                        <td>聚会地点租金</td>
+                        <td>{{ party_order.place_price }}</td>
+                    </tr>
+                </table>
+                <table class="table">
+                    <caption>聚会规格相关</caption>
+                    <tr class="bg-primary">
+                        <td>聚会规格ID</td>
+                        <td>{{ party_order.standard_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>服务员人数</td>
+                        <td>{{ party_order.waiter_count }}</td>
+                    </tr>
+                    <tr>
+                        <td>桌子数量</td>
+                        <td>{{ party_order.table_count }}</td>
+                    </tr>
+                    <tr>
+                        <td>椅子数量</td>
+                        <td>{{ party_order.chair_count }}</td>
+                    </tr>
+                    <tr>
+                        <td>规格价格</td>
+                        <td>{{ party_order.standard_price }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

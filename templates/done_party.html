@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css">
+        </style>
+        <title>填写评价</title>
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">聚会预约平台</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                聚会项目 <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/party_list" target="view_window">查看</a></li>
+                                <li><a href="/add_party" target="view_window">添加</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/goods_list" target="view_window">查看可购买物品</a>
+                        </li>
+                        <li>
+                            <a href="/place_list" target="view_window">查看可选地点</a>
+                        </li>
+                        <li>
+                            <a href="/standard_list" target="view_window">查看可选规格</a>
+                        </li>
+                        <li>
+                            <a href="/get_one_party/{{  order_id }}" target="view_window">返回聚会详情</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                {{ user_name }} <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user_info" target="view_window">个人资料</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/login" target="view_window">切换用户</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/signup" target="view_window">新用户注册</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="jumbotron">
+                <div class="container">
+                    <h1>填写聚会ID {{  order_id }} 评价</h1>
+                    <form class="form-horizontal" role="form" action="/do_party_done/{{ order_id }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <label for="name">评价</label>
+                                <textarea class="form-control" rows="3" name="review"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </body>
+</html>

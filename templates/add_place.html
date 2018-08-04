@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css">
+        </style>
+        <title>管理员添加可选地点</title>
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/admin">控制台</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="/admin/add_goods" target="view_window">添加可购买物品</a>
+                        </li>
+                        <li>
+                            <a href="/admin/add_place" target="view_window">添加可选地点</a>
+                        </li>
+                        <li>
+                            <a href="/admin/add_standard" target="view_window">添加可选规格</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="jumbotron">
+                <div class="container">
+                    <h1>可选地点添加</h1>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="bg-primary">
+                                <th>地点ID</th>
+                                <th>地址</th>
+                                <th>地点租金(元)</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        {% for place in place_list %}
+                        <tr>
+                            <td>{{ place.place_id }}</td>
+                            <td>{{ place.place_loc }}</td>
+                            <td>{{ place.place_price }}</td>
+                            <td><a class="btn btn-danger" href="/admin/delete_place/{{ place.place_id }}">删除</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <form class="form-horizontal" role="form" action="/admin/do_add_place" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="form-group">
+                            <label for="place_loc" class="col-sm-2 control-label">地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="place_loc" name="place_loc"
+                                        placeholder="请输入地址">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="place_price" class="col-sm-2 control-label">地点租金</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="place_price" name="place_price"
+                                        placeholder="请输入地点租金">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </body>
+</html>

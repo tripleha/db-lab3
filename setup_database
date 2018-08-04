@@ -1,0 +1,97 @@
+create table if not exists user(
+    user_id varchar(12) not null primary key,
+    user_pwd varchar(12) not null,
+    user_name varchar(100) not null,
+    phone varchar(11) not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists session(
+    session_id int unsigned not null auto_increment primary key,
+    user_id varchar(12) not null,
+    valid bigint unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists party_order(
+    order_id int unsigned not null auto_increment primary key,
+    user_id varchar(12) not null,
+    active varchar(1) not null default '1',
+    begin bigint unsigned not null,
+    end bigint unsigned not null,
+    review varchar(100) not null default '',
+    shopping_end bigint unsigned not null,
+    place_id int unsigned not null,
+    standard_id int unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists guest(
+    guest_id int unsigned not null auto_increment primary key,
+    guest_nike varchar(100) not null,
+    guest_phone varchar(11) not null,
+    order_id int unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists shopping_list(
+    shopping_id int unsigned not null auto_increment primary key,
+    goods_id int unsigned not null,
+    goods_count int unsigned not null,
+    order_id int unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists goods(
+    goods_id int unsigned not null auto_increment primary key,
+    goods_name varchar(100) not null,
+    goods_price int unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists place(
+    place_id int unsigned not null auto_increment primary key,
+    place_loc varchar(100) not null,
+    place_price int unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+create table if not exists standard(
+    standard_id int unsigned not null auto_increment primary key,
+    waiter_count int unsigned not null,
+    table_count int unsigned not null,
+    chair_count int unsigned not null,
+    standard_price int unsigned not null
+)engine=InnoDB default charset=utf8 auto_increment=1;
+
+alter table session
+add foreign key (user_id)
+references user(user_id) on delete cascade on update cascade
+
+alter table party_order
+add foreign key (user_id)
+references user(user_id) on delete cascade on update cascade
+
+alter table guest
+add foreign key (order_id)
+references party_order(order_id) on delete cascade on update cascade
+
+alter table shopping_list
+add foreign key (order_id)
+references party_order(order_id) on delete cascade on update cascade
+
+alter table shopping_list
+add foreign key (goods_id)
+references goods(goods_id) on delete cascade on update cascade
+
+alter table party_order
+add foreign key (place_id)
+references place(place_id) on delete cascade on update cascade
+
+alter table party_order
+add foreign key (standard_id)
+references standard(standard_id) on delete cascade on update cascade
+
+alter table session
+add index (user_id, valid, session_id)
+
+alter table user
+add index (user_id)
+
+create view shopping_list_view as
+select order_id, shopping_id, goods.goods_id as goods_id, goods_name, goods_price, goods_count
+from shopping_list, goods
+where shopping_list.goods_id=goods.goods_id
